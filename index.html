@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ACE in Action</title>
+    <style type="text/css" media="screen">
+        #editor {
+            top: 0;
+            width: 600px;
+            height: 300px;
+            border: 1px solid grey;
+            font-size: 18px;
+        }
+
+        #output {
+            white-space: pre;
+            border: 1px solid grey;
+            width: 600px;
+            height: 300px;
+        }
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="editor">const Rx = require('rxjs/Rx');
+const x = Rx.Observable.of(1,2,3);
+x.subscribe(val => console.log(val));</div>
+<button id="submit" type="button">Run Code</button>
+<div id="output"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  var editor = ace.edit("editor");
+  editor.getSession().setMode("ace/mode/javascript");
+
+  $("#submit").click(function() {
+    $.ajax({
+      url: "/code",
+      method: "POST",
+      data: {code: editor.getValue()}
+    }).done(function(data ) {
+      $( "#output" ).html( data);
+    });
+  });
+</script>
+
+</body>
+</html>
